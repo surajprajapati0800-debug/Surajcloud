@@ -3,70 +3,289 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyCloud – Suraj's Private Gallery</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<title>MyCloud</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --surface2: #1c1c28;
-    --border: #2a2a3d;
-    --accent: #7c6aff;
-    --accent2: #ff6a9a;
-    --accent3: #6affd4;
-    --text: #e8e8f0;
-    --muted: #7070a0;
-    --danger: #ff4d6d;
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e8e8f0;font-family:'DM Sans',sans-serif;min-height:100vh}
+#loginScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a0a0f;padding:20px;z-index:100}
+.card{background:#13131a;border:1px solid #2a2a3d;border-radius:24px;padding:40px 32px;width:100%;max-width:420px}
+.logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;background:linear-gradient(135deg,#7c6aff,#ff6a9a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.sub{color:#7070a0;font-size:13px;margin-bottom:28px}
+.lbl{font-size:11px;color:#7070a0;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.fg{margin-bottom:16px}
+input{width:100%;background:#1c1c28;border:1px solid #2a2a3d;border-radius:10px;padding:13px 14px;color:#e8e8f0;font-size:14px;outline:none;font-family:'DM Sans',sans-serif}
+input:focus{border-color:#7c6aff}
+.btn{width:100%;padding:14px;background:linear-gradient(135deg,#7c6aff,#5a48e0);border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:6px}
+.err{color:#ff4d6d;font-size:12px;margin-top:10px;display:none;text-align:center}
+#app{display:none;min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #2a2a3d;background:#0a0a0f;position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px}
+.hlogo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#7c6aff,#ff6a9a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ubtn{background:linear-gradient(135deg,#7c6aff,#5a48e0);border:none;border-radius:8px;padding:9px 16px;color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.lbtn{background:transparent;border:1px solid #2a2a3d;border-radius:8px;padding:9px 14px;color:#7070a0;font-size:13px;cursor:pointer}
+main{padding:20px;max-width:1200px;margin:0 auto}
+.stats{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.sc{background:#13131a;border:1px solid #2a2a3d;border-radius:14px;padding:16px 20px;flex:1;min-width:100px}
+.sv{font-family:'Syne',sans-serif;font-size:24px;font-weight:800}
+.sl{font-size:11px;color:#7070a0;margin-top:2px;text-transform:uppercase}
+.stitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:14px}
+.acrow{display:flex;gap:8px;margin-bottom:16px}
+.acrow input{flex:1}
+.abtn{background:#1c1c28;border:1px solid #6affd4;border-radius:8px;padding:11px 16px;color:#6affd4;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:28px}
+.acard{background:#13131a;border:1px solid #2a2a3d;border-radius:14px;padding:16px 12px;cursor:pointer;text-align:center;transition:border-color .2s,transform .2s;position:relative}
+.acard:hover,.acard.active{border-color:#7c6aff;transform:translateY(-2px)}
+.acard.active{background:rgba(124,106,255,.08)}
+.ai{font-size:28px;margin-bottom:8px}
+.an{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;word-break:break-word}
+.ac{font-size:10px;color:#7070a0;margin-top:3px}
+.adel{position:absolute;top:6px;right:6px;background:rgba(255,77,109,.15);border:none;border-radius:5px;color:#ff4d6d;font-size:10px;padding:2px 5px;cursor:pointer;display:none}
+.acard:hover .adel{display:block}
+.uz{border:2px dashed #2a2a3d;border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:20px;display:none}
+.uz.show{display:block}
+.ubtns{display:flex;flex-direction:column;gap:10px;max-width:300px;margin:16px auto 0}
+.mub{display:block;width:100%;padding:14px;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.mub:active{opacity:.8;transform:scale(.97)}
+.pw{background:#13131a;border:1px solid #2a2a3d;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:none}
+.pi{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;color:#7070a0}
+.pb{background:#1c1c28;border-radius:99px;height:5px}
+.pf{height:5px;background:linear-gradient(90deg,#7c6aff,#ff6a9a);border-radius:99px;transition:width .3s;width:0%}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pc{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:#13131a;border:1px solid #2a2a3d;cursor:pointer}
+.pc img{width:100%;height:100%;object-fit:cover;display:block}
+.po{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);opacity:0;transition:opacity .2s;display:flex;align-items:flex-end;padding:8px;gap:6px}
+.pc:hover .po,.pc:active .po{opacity:1}
+.pa{background:rgba(255,255,255,.15);border:none;border-radius:6px;color:#fff;font-size:11px;padding:5px 10px;cursor:pointer}
+.pa.del{background:rgba(255,77,109,.3)}
+.vcbadge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);border-radius:6px;color:#fff;font-size:18px;padding:2px 6px}
+.es{text-align:center;padding:40px 20px;color:#7070a0}
+.ei{font-size:40px;margin-bottom:12px}
+.et{font-family:'Syne',sans-serif;font-size:16px;color:#e8e8f0;margin-bottom:6px}
+.ld{display:flex;gap:5px;justify-content:center;padding:30px}
+.ld span{width:7px;height:7px;background:#7c6aff;border-radius:50%;animation:bounce .8s infinite alternate}
+.ld span:nth-child(2){animation-delay:.2s;background:#ff6a9a}
+.ld span:nth-child(3){animation-delay:.4s;background:#6affd4}
+@keyframes bounce{from{transform:translateY(0);opacity:.5}to{transform:translateY(-10px);opacity:1}}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:200;display:none;align-items:center;justify-content:center}
+#lb.open{display:flex}
+#lb img,#lb video{max-width:95vw;max-height:92vh;border-radius:10px;object-fit:contain}
+.lbc{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;border-radius:8px;color:#fff;font-size:18px;padding:6px 12px;cursor:pointer;z-index:201}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:#13131a;border:1px solid #2a2a3d;border-radius:10px;padding:10px 20px;font-size:13px;color:#e8e8f0;z-index:300;transition:transform .3s;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:#6affd4;color:#6affd4}
+#toast.er{border-color:#ff4d6d;color:#ff4d6d}
+.atag{display:inline-flex;align-items:center;background:rgba(124,106,255,.12);border:1px solid rgba(124,106,255,.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#7c6aff;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="card">
+    <div class="logo">☁ MyCloud</div>
+    <div class="sub">Tera private photo vault 🔐</div>
+    <div class="fg"><div class="lbl">Cloud Name</div><input type="text" id="cn" placeholder="e.g. ddftrc3an"></div>
+    <div class="fg"><div class="lbl">API Key</div><input type="text" id="ak" placeholder="e.g. 438755834924529"></div>
+    <div class="fg"><div class="lbl">API Secret</div><input type="password" id="as" placeholder="Your API secret"></div>
+    <div class="fg"><div class="lbl">Access Password</div><input type="password" id="pw" placeholder="Set a password"></div>
+    <button class="btn" onclick="login()">🚀 Enter MyCloud</button>
+    <div class="err" id="err">Sab fields fill karo!</div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="hlogo">☁ MyCloud</div>
+    <div class="hbtns">
+      <button class="ubtn" onclick="toggleUpload()">⬆ Upload</button>
+      <button class="lbtn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="sc"><div class="sv" id="sTot">0</div><div class="sl">Total Files</div></div>
+      <div class="sc"><div class="sv" id="sAlb">0</div><div class="sl">Albums</div></div>
+      <div class="sc"><div class="sv" id="sCur">0</div><div class="sl">This Album</div></div>
+    </div>
+
+    <div class="stitle">📁 Albums</div>
+    <div class="acrow">
+      <input type="text" id="aname" placeholder="New album name...">
+      <button class="abtn" onclick="createAlbum()">+ Create</button>
+    </div>
+    <div class="agrid" id="agrid"></div>
+
+    <div class="atag" id="curtag">📁 All Photos</div>
+
+    <div class="uz" id="uz">
+      <div style="font-size:32px">📸</div>
+      <div style="color:#7070a0;font-size:14px;margin-top:8px">Phone se files choose karo</div>
+      <div class="ubtns">
+        <label for="fi1" class="mub" style="background:linear-gradient(135deg,#7c6aff,#5a48e0)">📷 Photos Choose Karo<input type="file" id="fi1" multiple accept="image/*" onchange="upload(this.files)" style="display:none"></label>
+        <label for="fi2" class="mub" style="background:linear-gradient(135deg,#ff6a9a,#c0395e)">🎬 Videos Choose Karo<input type="file" id="fi2" multiple accept="video/*" onchange="upload(this.files)" style="display:none"></label>
+        <label for="fi3" class="mub" style="background:linear-gradient(135deg,#6affd4,#30a882);color:#000">📸 Camera Se Lo<input type="file" id="fi3" accept="image/*" capture="environment" onchange="upload(this.files)" style="display:none"></label>
+      </div>
+    </div>
+
+    <div class="pw" id="pw"><div class="pi"><span id="pt">Uploading...</span><span id="pp">0%</span></div><div class="pb"><div class="pf" id="pf"></div></div></div>
+
+    <div class="pgrid" id="pgrid"></div>
+  </main>
+</div>
+
+<div id="lb"><button class="lbc" onclick="closeLb()">✕</button><div id="lbc"></div></div>
+<div id="toast"></div>
+
+<script>
+let S={cn:'',ak:'',as:'',pw:'',album:'all',albums:[],photos:[],upShow:false};
+
+function login(){
+  const cn=document.getElementById('cn').value.trim();
+  const ak=document.getElementById('ak').value.trim();
+  const as=document.getElementById('as').value.trim();
+  const pw=document.getElementById('pw').value.trim();
+  if(!cn||!ak||!as||!pw){document.getElementById('err').style.display='block';return;}
+  S.cn=cn;S.ak=ak;S.as=as;S.pw=pw;
+  sessionStorage.setItem('mc',JSON.stringify({cn,ak,as,pw}));
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  init();
+}
+
+function logout(){sessionStorage.clear();location.reload();}
+
+window.onload=()=>{
+  const d=sessionStorage.getItem('mc');
+  if(d){const p=JSON.parse(d);S.cn=p.cn;S.ak=p.ak;S.as=p.as;S.pw=p.pw;
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='block';init();}
+};
+
+function init(){loadAlbums();loadPhotos();}
+
+function loadAlbums(){
+  const d=localStorage.getItem('alb_'+S.cn);
+  S.albums=d?JSON.parse(d):[];
+  renderAlbums();
+}
+
+function saveAlbums(){localStorage.setItem('alb_'+S.cn,JSON.stringify(S.albums));}
+
+function createAlbum(){
+  const n=document.getElementById('aname').value.trim();
+  if(!n)return;
+  if(S.albums.includes(n)){toast('Already exists!','er');return;}
+  S.albums.push(n);saveAlbums();renderAlbums();
+  document.getElementById('aname').value='';
+  toast('Album "'+n+'" ready! 🎉','ok');
+}
+
+function delAlbum(n,e){
+  e.stopPropagation();
+  if(!confirm('"'+n+'" delete karna?'))return;
+  S.albums=S.albums.filter(a=>a!==n);
+  saveAlbums();if(S.album===n)S.album='all';
+  renderAlbums();loadPhotos();
+}
+
+function renderAlbums(){
+  const em=['📁','🌄','🎬','🎉','🏞','📸','🌿','🔥','⚡','💫'];
+  let h=`<div class="acard ${S.album==='all'?'active':''}" onclick="selAlbum('all')"><div class="ai">🌐</div><div class="an">All Photos</div><div class="ac">${S.photos.length} files</div></div>`;
+  S.albums.forEach((n,i)=>{
+    const c=S.photos.filter(p=>p.folder&&p.folder.endsWith('/'+n)).length;
+    h+=`<div class="acard ${S.album===n?'active':''}" onclick="selAlbum('${n}')"><button class="adel" onclick="delAlbum('${n}',event)">✕</button><div class="ai">${em[i%em.length]}</div><div class="an">${n}</div><div class="ac">${c} files</div></div>`;
+  });
+  document.getElementById('agrid').innerHTML=h;
+  document.getElementById('sAlb').textContent=S.albums.length;
+}
+
+function selAlbum(n){
+  S.album=n;
+  document.getElementById('curtag').textContent=n==='all'?'📁 All Photos':'📁 '+n;
+  renderAlbums();loadPhotos();
+}
+
+async function loadPhotos(){
+  document.getElementById('pgrid').innerHTML='<div class="ld"><span></span><span></span><span></span></div>';
+  try{
+    const auth='Basic '+btoa(S.ak+':'+S.as);
+    const ri=await fetch(`https://api.cloudinary.com/v1_1/${S.cn}/resources/image?max_results=500`,{headers:{Authorization:auth}});
+    const rv=await fetch(`https://api.cloudinary.com/v1_1/${S.cn}/resources/video?max_results=500`,{headers:{Authorization:auth}});
+    const di=await ri.json();const dv=await rv.json();
+    let all=[...(di.resources||[]),...(dv.resources||[])];
+    if(S.album!=='all')all=all.filter(r=>r.folder==='mycloud/'+S.album);
+    else all=all.filter(r=>r.folder&&r.folder.startsWith('mycloud'));
+    S.photos=all;renderPhotos(all);renderAlbums();
+    document.getElementById('sTot').textContent=all.length;
+    const cur=S.album==='all'?all.length:all.filter(p=>p.folder==='mycloud/'+S.album).length;
+    document.getElementById('sCur').textContent=cur;
+  }catch(e){
+    document.getElementById('pgrid').innerHTML='<div class="es"><div class="ei">❌</div><div class="et">Load nahi hua</div><div>Credentials check karo</div></div>';
   }
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+function renderPhotos(photos){
+  const g=document.getElementById('pgrid');
+  if(!photos.length){g.innerHTML='<div class="es"><div class="ei">📭</div><div class="et">Koi photo nahi</div><div>Upload karo! 📸</div></div>';return;}
+  g.innerHTML=photos.map(p=>{
+    const iv=p.resource_type==='video';
+    const th=iv?`https://res.cloudinary.com/${S.cn}/video/upload/w_300,h_300,c_fill,so_2/${p.public_id}.jpg`:`https://res.cloudinary.com/${S.cn}/image/upload/w_300,h_300,c_fill/${p.public_id}`;
+    const fu=iv?`https://res.cloudinary.com/${S.cn}/video/upload/${p.public_id}.mp4`:`https://res.cloudinary.com/${S.cn}/image/upload/${p.public_id}`;
+    return`<div class="pc" onclick="openLb('${fu}',${iv})"><img src="${th}" loading="lazy">${iv?'<div class="vcbadge">▶</div>':''}<div class="po"><button class="pa" onclick="event.stopPropagation();dl('${fu}','${p.public_id}')">⬇</button><button class="pa del" onclick="event.stopPropagation();delPhoto('${p.public_id}','${p.resource_type}')">🗑</button></div></div>`;
+  }).join('');
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
+function toggleUpload(){S.upShow=!S.upShow;document.getElementById('uz').classList.toggle('show',S.upShow);}
+
+async function upload(files){
+  if(!files.length)return;
+  const folder=S.album==='all'?'mycloud':'mycloud/'+S.album;
+  const pw=document.getElementById('pw');const pf=document.getElementById('pf');
+  const pt=document.getElementById('pt');const pp=document.getElementById('pp');
+  pw.style.display='block';let done=0;
+  for(const f of files){
+    pt.textContent='Uploading: '+f.name;
+    const iv=f.type.startsWith('video');
+    const ts=Math.round(Date.now()/1000);
+    const sig=await sha1(`folder=${folder}&timestamp=${ts}${S.as}`);
+    const fd=new FormData();
+    fd.append('file',f);fd.append('api_key',S.ak);fd.append('timestamp',ts);fd.append('signature',sig);fd.append('folder',folder);
+    try{
+      await fetch(`https://api.cloudinary.com/v1_1/${S.cn}/${iv?'video':'image'}/upload`,{method:'POST',body:fd});
+      done++;const pc=Math.round(done/files.length*100);pf.style.width=pc+'%';pp.textContent=pc+'%';
+    }catch(e){toast('Fail: '+f.name,'er');}
   }
+  setTimeout(()=>{pw.style.display='none';pf.style.width='0%';},1500);
+  toast(done+' files upload! 🎉','ok');loadPhotos();
+}
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
+async function delPhoto(pid,rt){
+  if(!confirm('Delete karna?'))return;
+  const ts=Math.round(Date.now()/1000);
+  const sig=await sha1(`public_id=${pid}&timestamp=${ts}${S.as}`);
+  const fd=new FormData();fd.append('public_id',pid);fd.append('api_key',S.ak);fd.append('timestamp',ts);fd.append('signature',sig);
+  await fetch(`https://api.cloudinary.com/v1_1/${S.cn}/${rt}/destroy`,{method:'POST',body:fd});
+  toast('Deleted!','ok');loadPhotos();
+}
 
-  /* GLOW BLOBS */
-  .blob {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.15;
-  }
-  .blob1 { width: 500px; height: 500px; background: var(--accent); top: -150px; left: -150px; }
-  .blob2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; }
+function dl(url,name){const a=document.createElement('a');a.href=url;a.download=name.split('/').pop();a.target='_blank';a.click();}
 
-  /* LOGIN SCREEN */
-  #loginScreen {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    background: var(--bg);
-    padding: 20px;
-  }
+function openLb(url,iv){
+  document.getElementById('lbc').innerHTML=iv?`<video src="${url}" controls autoplay style="max-width:95vw;max-height:92vh;border-radius:10px"></video>`:`<img src="${url}">`;
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb(){document.getElementById('lb').classList.remove('open');document.getElementById('lbc').innerHTML='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
 
-  .login-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 48px 40px;
-    width: 100%;
+function toast(msg,type=''){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='show '+(type||'');
+  setTimeout(()=>t.className='',3000);
+}
+
+async function sha1(str){
+  const buf=await crypto.subtle.digest('SHA-1',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+</script>
+</body>
+</html>
